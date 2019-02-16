@@ -1,0 +1,32 @@
+- name: copy etcd  to nodes
+  copy:
+    src: ../files/etcd
+    dest: /usr/local/bin/etcd
+    mode: 0750
+
+- name: copy etcdctl to nodes
+  copy:
+    src: ../files/etcdctl
+    dest: /usr/local/bin/etcdctl
+    mode: 0750
+
+- name: create data directory for etcd
+  file:
+    path: /var/lib/etcd
+    state: directory
+
+- name: provide etcd.service to nodes
+  template:
+    src: etcd.service.j2
+    dest: /usr/lib/systemd/system/etcd.service
+  register: result
+
+- name: start etcd service
+  systemd:
+    daemon_reload: true
+    name: etcd
+    state: started
+    enabled: true
+  when: result|success
+  notify:
+     - restart etcd

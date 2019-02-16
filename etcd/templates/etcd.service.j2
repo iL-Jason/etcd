@@ -1,0 +1,18 @@
+[Unit]
+Description=etcd server
+After=network.target
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=notify
+WorkingDirectory=/var/lib/etcd/
+EnvironmentFile=-/etc/etcd/etcd.conf
+ExecStart=/usr/local/bin/etcd --name {{ ansible_hostname }} --initial-advertise-peer-urls http://{{ ansible_hostname }}:2380 --listen-peer-urls http://0.0.0.0:2380 --listen-client-urls http://0.0.0.0:2379,http://0.0.0.0:4001 --advertise-client-urls http://{{ ansible_hostname }}:2379 --initial-cluster-token willing-uat-etcd-cluster --initial-cluster csuvmachine016=http://csuvmachine016:2380,csuvmachine017=http://csuvmachine017:2380,csuvmachine018=http://csuvmachine018:2380 --initial-cluster-state new --data-dir=/var/lib/etcd/default.etcd
+
+Restart=on-failure
+RestartSec=5
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
