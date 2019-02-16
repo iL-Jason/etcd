@@ -1,0 +1,4 @@
+- hosts: etcd_cluster
+  remote_user: root
+  roles:
+    - etcd
