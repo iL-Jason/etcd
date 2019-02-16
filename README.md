@@ -1,5 +1,6 @@
  
 ##etcd server info
+
 {
     "node01":{
         "ip-address":"10.128.0.215",
